@@ -16,14 +16,14 @@
     },
 
     {
-      name: 'node-rtsp-rtmp-server',
+      name: 'coturn',
       exec: ["envconsul","-log-level", "debug",
         "-consul", "{{ .CONSUL_SERVER | default "consul.tls.ai" }}:8500",
-        "-prefix", "node-rtsp-rtmp-server", "devops/entrypoint.sh"],
-      port: {{.PORT | default 3000}},
+        "-prefix", "coturn", "devops/entrypoint.sh"],
+      port: {{.PORT | default 3478}},
       restarts: "unlimited",
       health: {
-        exec: '/usr/bin/curl -o /dev/null --fail -s http://{{.API_IP | default "api.tls.ai"}}:{{.PORT | default 3000}}',
+        exec: '/usr/bin/curl -o /dev/null --fail -s http://{{.COTURN_IP | default "coturn.tls.ai"}}:{{.PORT | default 3478}}',
         interval: 5,
         ttl: 20
       },

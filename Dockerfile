@@ -94,6 +94,7 @@ EXPOSE 3478 3478/udp
 
 VOLUME ["/var/lib/coturn"]
 
-ENTRYPOINT ["docker-entrypoint.sh"]
+ENTRYPOINT ["/bin/containerpilot"]
+#ENTRYPOINT ["docker-entrypoint.sh"]
 
 CMD ["-n", "--log-file=stdout", "--external-ip=$(detect-external-ip)"]
