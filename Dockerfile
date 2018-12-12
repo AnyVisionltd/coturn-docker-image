@@ -64,6 +64,23 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/testing' \
  && rm -rf /var/cache/apk/* \
            /tmp/*
 
+# Install ContainerPilot
+ENV CONTAINERPILOT_VERSION 3.4.2
+RUN export CP_SHA1=5c99ae9ede01e8fcb9b027b5b3cb0cfd8c0b8b88 \
+    && curl -Lso /tmp/containerpilot.tar.gz \
+         "https://github.com/joyent/containerpilot/releases/download/${CONTAINERPILOT_VERSION}/containerpilot-${CONTAINERPILOT_VERSION}.tar.gz" \
+    && echo "${CP_SHA1}  /tmp/containerpilot.tar.gz" | sha1sum -c \
+    && tar zxf /tmp/containerpilot.tar.gz -C /bin \
+    && rm /tmp/containerpilot.tar.gz
+
+#Install envconsul
+RUN wget https://releases.hashicorp.com/envconsul/0.6.1/envconsul_0.6.1_linux_amd64.zip&&unzip envconsul_0.6.1_linux_amd64.zip\
+&& ln -sf $PWD/envconsul /usr/local/bin
+
+# COPY ContainerPilot configuration
+ENV CONTAINERPILOT_PATH=/etc/containerpilot.json5
+COPY devops/containerpilot.json5 ${CONTAINERPILOT_PATH}
+ENV CONTAINERPILOT=${CONTAINERPILOT_PATH}
 
 COPY rootfs /
 
