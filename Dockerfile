@@ -12,7 +12,7 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/testing' \
  && apk upgrade \
  && apk add --no-cache \
         ca-certificates \
-        curl \
+        curl wget iputils nmap unzip \
  && update-ca-certificates \
     \
  # Install Coturn dependencies
@@ -73,14 +73,10 @@ RUN export CP_SHA1=5c99ae9ede01e8fcb9b027b5b3cb0cfd8c0b8b88 \
     && tar zxf /tmp/containerpilot.tar.gz -C /bin \
     && rm /tmp/containerpilot.tar.gz
 
-#Install envconsul
-RUN wget https://releases.hashicorp.com/envconsul/0.6.1/envconsul_0.6.1_linux_amd64.zip&&unzip envconsul_0.6.1_linux_amd64.zip\
-&& ln -sf $PWD/envconsul /usr/local/bin
-
 # COPY ContainerPilot configuration
 ENV CONTAINERPILOT_PATH=/etc/containerpilot.json5
-COPY devops/containerpilot.json5 ${CONTAINERPILOT_PATH}
 ENV CONTAINERPILOT=${CONTAINERPILOT_PATH}
+COPY rootfs/containerpilot.json5 ${CONTAINERPILOT_PATH}
 
 COPY rootfs /
 
@@ -89,12 +85,10 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh \
  && ln -s /usr/local/bin/detect-external-ip.sh \
           /usr/local/bin/detect-external-ip
 
-
 EXPOSE 3478 3478/udp
 
 VOLUME ["/var/lib/coturn"]
 
-ENTRYPOINT ["/bin/containerpilot"]
-#ENTRYPOINT ["docker-entrypoint.sh"]
+ENTRYPOINT ["docker-entrypoint.sh"]
 
 CMD ["-n", "--log-file=stdout", "--external-ip=$(detect-external-ip)"]
