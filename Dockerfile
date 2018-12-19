@@ -1,7 +1,7 @@
 # https://hub.docker.com/_/alpine
 FROM alpine:edge
 
-MAINTAINER Instrumentisto Team <developer@instrumentisto.com>
+MAINTAINER Ziv Tsarfati <ziv@anyvision.co>
 
 
 # Build and install Coturn
@@ -81,14 +81,8 @@ COPY rootfs/containerpilot.json5 ${CONTAINERPILOT_PATH}
 COPY rootfs /
 
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh \
-             /usr/local/bin/detect-external-ip.sh \
- && ln -s /usr/local/bin/detect-external-ip.sh \
-          /usr/local/bin/detect-external-ip
+             /usr/local/bin/detect-external-ip.sh
 
 EXPOSE 3478 3478/udp
 
-VOLUME ["/var/lib/coturn"]
-
-ENTRYPOINT ["docker-entrypoint.sh"]
-
-CMD ["-n", "--log-file=stdout", "--external-ip=$(detect-external-ip)"]
+ENTRYPOINT ["/bin/containerpilot"]
