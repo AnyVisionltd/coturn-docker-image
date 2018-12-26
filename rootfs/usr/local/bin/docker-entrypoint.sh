@@ -2,7 +2,7 @@
 
 # If command starts with an option, prepend with turnserver binary.
 if [ "${1:0:1}" == '-' ]; then
-  set -- turnserver --external-ip="${EXTERNAL_IP:-$(hostname -i)}" "$@"
+  set -- turnserver --external-ip="${EXTERNAL_IP:-$(ip route get 1 | awk '{print $NF;exit}')}" "$@"
 fi
 
 exec $(eval "echo $@")
