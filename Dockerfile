@@ -12,7 +12,7 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/testing' \
  && apk upgrade \
  && apk add --no-cache \
         ca-certificates \
-        curl wget iputils nmap unzip \
+        curl wget iputils bind-tools \
  && update-ca-certificates \
     \
  # Install Coturn dependencies
