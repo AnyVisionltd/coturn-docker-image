@@ -1,6 +1,6 @@
 #!/bin/sh
 
-IP="${EXTERNAL_IP:-$(ip route get 1 | awk '{print $NF;exit}')}"
+IP="${EXTERNAL_IP:-$(ip route get "$(dig ${WEBRTC_HOST:-webrtc.tls.ai} +short)" | awk '{print $NF;exit}')"
 
 # If command starts with an option, prepend with turnserver binary.
 if [ "${1:0:1}" == '-' ]; then
