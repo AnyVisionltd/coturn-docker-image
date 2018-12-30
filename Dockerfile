@@ -12,7 +12,7 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/testing' \
  && apk upgrade \
  && apk add --no-cache \
         ca-certificates \
-        curl wget iputils bind-tools \
+        curl wget iputils bind-tools grep \
  && update-ca-certificates \
     \
  # Install Coturn dependencies
@@ -80,8 +80,7 @@ COPY rootfs/containerpilot.json5 ${CONTAINERPILOT_PATH}
 
 COPY rootfs /
 
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh \
-             /usr/local/bin/detect-external-ip.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 3478 3478/udp
 
