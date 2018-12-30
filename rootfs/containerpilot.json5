@@ -8,11 +8,12 @@
   jobs: [
     {
       name: 'coturn',
-      exec: "/usr/local/bin/docker-entrypoint.sh {{.COTURN_CMD}}",
+      exec: "/usr/local/bin/docker-entrypoint.sh",
       port: {{.PORT | default 3478}},
       restarts: "unlimited",
       health: {
-        exec: '/usr/bin/curl -o /dev/null --fail -s http://localhost:{{.PORT | default 3478}}',
+        {{/* exec: '/usr/bin/curl -o /dev/null --fail -s http://localhost:{{.PORT | default 3478}}', */}}
+        exec: "echo",
         interval: 5,
         ttl: 20
       },
