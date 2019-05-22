@@ -64,24 +64,10 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/testing' \
  && rm -rf /var/cache/apk/* \
            /tmp/*
 
-# Install ContainerPilot
-ENV CONTAINERPILOT_VERSION 3.4.2
-RUN export CP_SHA1=5c99ae9ede01e8fcb9b027b5b3cb0cfd8c0b8b88 \
-    && curl -Lso /tmp/containerpilot.tar.gz \
-         "https://github.com/joyent/containerpilot/releases/download/${CONTAINERPILOT_VERSION}/containerpilot-${CONTAINERPILOT_VERSION}.tar.gz" \
-    && echo "${CP_SHA1}  /tmp/containerpilot.tar.gz" | sha1sum -c \
-    && tar zxf /tmp/containerpilot.tar.gz -C /bin \
-    && rm /tmp/containerpilot.tar.gz
-
-# COPY ContainerPilot configuration
-ENV CONTAINERPILOT_PATH=/etc/containerpilot.json5
-ENV CONTAINERPILOT=${CONTAINERPILOT_PATH}
-COPY rootfs/containerpilot.json5 ${CONTAINERPILOT_PATH}
-
 COPY rootfs /
 
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 3478 3478/udp
 
-ENTRYPOINT ["/bin/containerpilot"]
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
